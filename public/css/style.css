@@ -1,0 +1,30 @@
+/*html {
+	background: yellow;
+}*/
+
+body {
+	font-family: 'Crimson Text', serif;
+	color: black;
+}
+
+img {
+	margin: 10px;
+	max-width: 300px;
+	max-height: 300px;
+	overflow: hiddens;
+	width: auto;
+	height: auto;
+	max-width: 100%;
+	height: auto;
+}
+
+
+header h1 {
+	font-size: 80px;
+	text-align: right;
+}
+
+header h1 span {
+	font-size: 50px;
+	font-style: italic;
+}
