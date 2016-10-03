@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 var episodeSchema = new mongoose.Schema({
-	podcastName: ['Subscriptions'],
 	episodeName: String,
 	episodeInfo: String,
 	episodeLoc: String,
@@ -11,4 +10,5 @@ var episodeSchema = new mongoose.Schema({
 });
 
 exports.schema = episodeSchema;
-module.exports = mongoose.model('Episodes',episodeSchema);
+var episode = mongoose.model('Episodes',episodeSchema);
+module.exports = episode;

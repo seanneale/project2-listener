@@ -97,6 +97,13 @@ episode1.save(function(err){
 		return;
 	};
 	console.log('episode1 Created');
+	subscriptionsReq.find({},function(err,subscriptions){
+		if(err){
+			console.log('DB error', err);
+			return;
+		}
+		subscriptions[0].episodes.push(episode1);
+	})
 });
 
 var subs1 = subscriptionsReq({
