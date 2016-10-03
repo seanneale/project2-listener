@@ -53,6 +53,36 @@ server.listen( 3000, function(){
     console.log('listening on port 3000');
 });
 
+var userDelete = function(query){
+	userReq.findOneAndRemove({username: query}, function(err){
+		if(err){
+			console.log(err);
+		}
+		console.log('User Removed')
+	})
+}
+
+var addPodcastToUser = function(username,newPod){
+	userReq.findOneAndUpdate({username: username},{podcast: newPod, episodes: []}, function(err){
+		if(err){
+			console.log(err);
+		}
+		//function to push all the existing episodes to the user and flag played: false
+		console.log(user);
+	})
+}
+
+var subs1 = subscriptionsReq({
+	name: 'The Bugle',
+	description: 'John Oliver and Andy Zaltzman, the transatlantic region’s leading bi-continental satirical double-act, leave no hot potato unbuttered in their worldwide-hit weekly topical comedy show.',
+	rssFeedLoc: 'http://feeds.feedburner.com/thebuglefeed',
+	episodes: [],
+	favourited: true
+})
+
+addPodcastToUser('11111111',subs1);
+
+
 //testing collections
 // var user1 = userReq({
 // 	username: 'seanneale',
@@ -169,3 +199,5 @@ server.listen( 3000, function(){
 // 		});
 // 	})
 // });
+
+

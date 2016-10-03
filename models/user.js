@@ -33,10 +33,10 @@ userSchema.pre('save', function(next){
 })
 
 //method for validating user's password
-userSchema.methods.vaildPassword = function (candidatePassword, cb) {
-	bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-		cb(err, isMatch);
-	});
+userSchema.methods.validPassword = function (candidatePassword, cb) {
+  bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+    cb(err, isMatch);
+  });
 };
 
 module.exports = mongoose.model('User',userSchema);

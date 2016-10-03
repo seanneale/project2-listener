@@ -6,7 +6,7 @@ var localStrategy = require('passport-local').Strategy;
 var validator = require('validator');
 
 // Load user model
-//var User = require('../model/user');
+var User = require('../models/user');
 
 module.exports = function( passport ) {
 
@@ -24,16 +24,12 @@ module.exports = function( passport ) {
 
   // Passport signup
   passport.use('local-signup', new localStrategy({
-      usernameField : 'email',
+      usernameField : 'username',
       passwordField : 'password',
       passReqToCallback: true
     },
-    function( req, email, password, done){
-
-        // Check that the email is in the right format
-        if( !validator.isEmail(email) ){
-          return done(null, false, req.flash('loginMessage','That is not a valid email address'));
-        }
+    function( req, username, password, done){
+        //check that the the username is unique
 
         // Check that the password is at least 8 chars
         if( password.length < 8 ){
@@ -41,20 +37,24 @@ module.exports = function( passport ) {
         }
 
         process.nextTick(function(){
-          User.findOne( {'local.email' : email }, function(err, user){
+          User.findOne( {'username' : username }, function(err, user){
             if(err){
               return done(err);
             }
             if(user){
-              return done(null, false, req.flash('loginMessage','That email is already in use'));
+              return done(null, false, req.flash('loginMessage','That username is already in use'));
             }else{
               var newUser = new User();
-              newUser.local.email = email;
-              newUser.local.password = password;
+              newUser.username = username;
+              newUser.password = password;
+              newUser.podcast = [];
+              newUser.settings = {};
+              newUser.lastLogin = Date();
               newUser.save(function(err){
                 if(err){
                   console.log(err);
                 }
+                console.log('successful sign up');
                 return done(null, newUser, req.flash('loginMessage', 'Logged in successfully'));
               });
             }
@@ -64,13 +64,13 @@ module.exports = function( passport ) {
 
   // Passport login
   passport.use('local-login', new localStrategy({
-      usernameField : 'email',
+      usernameField : 'username',
       passwordField : 'password',
       passReqToCallback: true
     },
-    function( req, email, password, done){
+    function( req, username, password, done){
         process.nextTick(function(){
-          User.findOne( {'local.email' : email }, function(err, user){
+          User.findOne( {'username' : username }, function(err, user){
             if(err){
               return done(err);
             }
@@ -78,17 +78,20 @@ module.exports = function( passport ) {
             if(!user){
               return done(null,false, req.flash('loginMessage', 'sorry no one by that email'));
             }
-
             user.validPassword(password, function(err, isMatch){
-
               if(isMatch){
+                console.log('success log in');
                 return done(null, user, req.flash('loginMessage', 'Logged in successfully'));
+              } else {
+                console.log('failure');
               }
-
+              
               return done(null,false, req.flash('loginMessage', 'sorry wrong password'));
             })
           });
         });
-    }));
+    })
+  
+  );
 
 }
