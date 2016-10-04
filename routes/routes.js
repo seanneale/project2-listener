@@ -48,7 +48,7 @@ function getSubsDataFromRSSFeed (rssFeed){
 	});
 }
 
-function getEpisodeDataFromRSSFeed (rssFeed, res){
+function getEpisodeDataFromRSSFeed (req, res){
 	var episodeArray = [];
 	var subInfo = {};
 	var FeedParser = require('feedparser')
@@ -105,7 +105,6 @@ function getEpisodeDataFromRSSFeed (rssFeed, res){
 				if(subs){
 					console.log('podcast already exists')
 	            } else {
-	            	console.log('else');
 	            	var newSub = new subscriptionsReq();
 	            	newSub.episodes = [];
 	            	newSub.name = subInfo.name;
@@ -129,7 +128,6 @@ function getEpisodeDataFromRSSFeed (rssFeed, res){
             					console.log('episode created');            					
             				})
 		            	}
-    					console.log(newSub)
     					newSub.save(function(err){
 		            		if(err){
 		            			console.log(err);
@@ -172,8 +170,14 @@ module.exports = function(app, passport){
 
 	//testing the server
 	app.get('/', function(req, res){
-		getEpisodeDataFromRSSFeed(letsTalkAboutTech, res)
-		// res.render('whoops', {title: 'res vs app render'});
+		//console.log(req.user);
+		// getEpisodeDataFromRSSFeed(letsTalkAboutTech, res);
+		res.render('whoops', {title: 'res vs app render'});
+	});
+
+	app.post('/',function(req,res){
+		//console.log(req);
+		console.log(req.body)
 	});
 
 	// load login page

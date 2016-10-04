@@ -33,6 +33,20 @@ function signUp(e){
 		method: 'POST',
 		url: '/signup',
 		data: newUser
+	})//.done(function(){
+	// 	window.location.href = '/episodes'
+	// })
+}
+
+function addNewPodcast(e){
+	e.preventDefault();
+	var newPodcastUrl = $('#newPodcastEntry').val();
+	console.log(typeof(newPodcastUrl));
+
+	$.ajax({
+		method: 'POST',
+		url: '/',
+		data: {newPodcastUrl: newPodcastUrl}
 	}).done(function(){
 		window.location.href = '/episodes'
 	})
@@ -43,4 +57,5 @@ $(document).ready(function(){
 	console.log('ready');
 	$('#loginSubmitBtn').on('click',login);
 	$('#signUpSubmitBtn').on('click',signUp);
+	$('#newPodcast').on('click',addNewPodcast);
 })
