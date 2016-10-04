@@ -9,7 +9,7 @@ var userSchema = new mongoose.Schema({
 	lastLogin: Date,
 	podcasts: [{
 		podcast: subs.schema,
-		episodes: [{	episode: episode.schema,
+		playedEpisodes: [{	episode: episode.schema,
 						played: Boolean
 					}]
 	}],
