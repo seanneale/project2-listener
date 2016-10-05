@@ -4,7 +4,7 @@ const subs = require('./subscriptions');
 var bcrypt   = require('bcrypt-nodejs');
 
 var userSchema = new mongoose.Schema({
-	username: String,
+	username: { type: String, unique: true },
 	password: String,
 	lastLogin: Date,
 	podcasts: [{

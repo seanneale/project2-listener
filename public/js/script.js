@@ -33,9 +33,9 @@ function signUp(e){
 		method: 'POST',
 		url: '/signup',
 		data: newUser
-	})//.done(function(){
-	// 	window.location.href = '/episodes'
-	// })
+	}).done(function(){
+		window.location.href = '/episodes'
+	})
 }
 
 function addNewPodcast(e){

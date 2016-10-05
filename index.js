@@ -298,7 +298,13 @@ var subs1 = subscriptionsReq({
 // 	  	} else {
 // 	  		var image = item.image;
 // 	  	}
-// 	  	var wantedInfo = {episodeName: item.title,	episodeInfo: item.description, episodeLoc: item.link, image: image};
+// 	  	// console.log(item.meta);
+// 	  	console.log(item.date);
+// 	  	console.log('before = '+item.date);
+// 	  	var date = new Date();
+// 	  	console.log('after = '+date);
+// 		console.log(typeof date );
+// 	  	var wantedInfo = {episodeName: item.title,	episodeInfo: item.description, episodeLoc: item.link, image: image, releaseDate: item.date};
 // 	  	episodeArray.push(wantedInfo);
 // 	  	// console.log(episodeArray.length);
 // 	    // console.log(wantedInfo);
@@ -306,19 +312,19 @@ var subs1 = subscriptionsReq({
 // 	  }
 // 	});
 // 	feedparser.on('finish',function(){
-// 		console.log(episodeArray);
+// 		// console.log(episodeArray);
 // 		return episodeArray.length;
 // 	});
 // //	console.log(episodeArray);
 // }
 
-// // getEpisodeDataFromRSSFeed(letsTalkAboutTech);
-// // getEpisodeDataFromRSSFeed(dannyBaker);
-// // getEpisodeDataFromRSSFeed(theBugle);
-// // getEpisodeDataFromRSSFeed(answerMeThis);
+// // // // getEpisodeDataFromRSSFeed(letsTalkAboutTech);
+// getEpisodeDataFromRSSFeed(dannyBaker);
+// // // // getEpisodeDataFromRSSFeed(theBugle);
+// // // // getEpisodeDataFromRSSFeed(answerMeThis);
 
-// function test (rssFeed){
-// 	getEpisodeDataFromRSSFeed(rssFeed);
-// }
+// // // function test (rssFeed){
+// // // 	getEpisodeDataFromRSSFeed(rssFeed);
+// // // }
 
-// test(dannyBaker);
+// // // test(dannyBaker);

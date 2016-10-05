@@ -4,7 +4,8 @@ var episodeSchema = new mongoose.Schema({
 	episodeName: String,
 	episodeInfo: String,
 	episodeLoc: String,
-	image: String
+	image: String,
+	releaseDate: Date
 },{
 	timestamps: true
 });

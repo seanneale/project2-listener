@@ -11,50 +11,45 @@ var dannyBaker = 'http://www.bbc.co.uk/programmes/b00mjjxr/episodes/downloads.rs
 var letsTalkAboutTech = 'http://www.bbc.co.uk/programmes/p02nrxgq/episodes/downloads.rss';
 
 
-function getSubsDataFromRSSFeed (rssFeed){
-	var FeedParser = require('feedparser')
-	  , request = require('request');
+var addEpisodesToUser = function(user,newPod){
+	//only use this function to when adding a new subscription to the user
+	//find the podcast in the users array of podcast
+	for(var i = 0; i < user.podcasts.length; i++){
+		if(newPod.name == user.podcasts[i].podcast.name){
+			for(var j = 0; j < newPod.episodes.length; j++){
+				user.podcasts[i].playedEpisodes[j] = {episode: newPod.episodes[j], played: false};
+			}
+		}
+	}
+}
 
-	var req = request(rssFeed)
-	  , feedparser = new FeedParser();
-
-	req.on('error', function (error) {
-	  // handle any request errors
-	});
-	req.on('response', function (res) {
-	  var stream = this;
-
-	  if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
-
-	  stream.pipe(feedparser);
-	});
-
-
-	feedparser.on('error', function(error) {
-	  // always handle errors
-	});
-	feedparser.on('readable', function() {
-	  // This is where the action is!
-	  var stream = this
-	    , meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
-	    , item;
-
-	  while (item = stream.read()) {
-	  	console.log(item);
-	  	var wantedInfo = {name: item.meta.title, description: item.meta.description, link: item.meta.link}
-	    console.log(wantedInfo);
-	    return wantedInfo;
-	  }
-	});
+var addPodcastToUser = function(username,newPod){
+	userReq.findOne({'username': username}, function(err,user){
+		if(err){
+			console.log(err);
+		}
+		//function to push all the existing episodes to the user and flag played: false
+		
+		user.podcasts.push({'podcast': newPod, playedEpisodes: [{}]});
+		addEpisodesToUser(user,newPod);
+		// Remember to save the user
+		user.save(function(){
+			if(err){
+				console.log(err);
+			}
+			console.log('podcasts and episodes added to user');	
+		})
+	})
 }
 
 function getEpisodeDataFromRSSFeed (req, res){
+	var username = req.user.username;
 	var episodeArray = [];
 	var subInfo = {};
 	var FeedParser = require('feedparser')
 	  , request = require('request');
 
-	var req = request(rssFeed)
+	var req = request(req.body.newPodcastUrl)
 	  , feedparser = new FeedParser();
 
 	req.on('error', function (error) {
@@ -84,9 +79,9 @@ function getEpisodeDataFromRSSFeed (req, res){
 	  	} else {
 	  		var image = item.image;
 	  	}
-	  	var wantedInfo = {episodeName: item.title,	episodeInfo: item.description, episodeLoc: item.link, image: image};
+	  	var wantedInfo = {episodeName: item.title,	episodeInfo: item.description, episodeLoc: item.link, image: image, releaseDate: item.date};
 	  	episodeArray.push(wantedInfo);
-		subInfo = {name: item.meta.title, description: item.meta.description, link: item.meta.link}
+		subInfo = {name: item.meta.title, description: item.meta.description, link: item.meta.link, lastUpdate: item.meta.date}
 	  	// console.log(episodeArray.length);
 	    // console.log(wantedInfo);
 	    // return wantedInfo;
@@ -104,6 +99,7 @@ function getEpisodeDataFromRSSFeed (req, res){
 				}
 				if(subs){
 					console.log('podcast already exists')
+					addPodcastToUser(username,subs);
 	            } else {
 	            	var newSub = new subscriptionsReq();
 	            	newSub.episodes = [];
@@ -111,6 +107,7 @@ function getEpisodeDataFromRSSFeed (req, res){
 	            	newSub.description = subInfo.description;
 	            	newSub.link = subInfo.link;
 	            	newSub.favourited = false;
+	            	newSub.lastUpdate = subInfo.lastUpdate // check for date format
 	            	//console.log(newSub);
 	            	process.nextTick(function(){
 	            		//mkaing the episodes
@@ -120,6 +117,7 @@ function getEpisodeDataFromRSSFeed (req, res){
             				newEp.episodeInfo = episodeArray[i].episodeInfo;
             				newEp.episodeLoc = episodeArray[i].episodeLoc;
             				newEp.image =episodeArray[i].image;
+            				newEp.releaseDate = episodeArray[i].releaseDate;
             				newSub.episodes[i] = newEp;
             				newEp.save(function(err){
             					if(err){
@@ -133,6 +131,7 @@ function getEpisodeDataFromRSSFeed (req, res){
 		            			console.log(err);
 		            		}
 		            		console.log('podcast created');
+		            		addPodcastToUser(username,newSub);
 		            	})
 	            	})
 	            }
@@ -146,18 +145,6 @@ function getEpisodeDataFromRSSFeed (req, res){
 	});
 }
 
-// getEpisodeDataFromRSSFeed(letsTalkAboutTech);
-// getEpisodeDataFromRSSFeed(dannyBaker);
-// getEpisodeDataFromRSSFeed(theBugle);
-// getEpisodeDataFromRSSFeed(answerMeThis);
-
-function test (rssFeed){
-	var b = getEpisodeDataFromRSSFeed(rssFeed, res);
-	console.log(b);
-}
-
-// test(dannyBaker);
-
 module.exports = function(app, passport){
 
 	//router middleware
@@ -168,6 +155,10 @@ module.exports = function(app, passport){
 		res.redirect('/')
 	}
 
+	app.get('/userpodcasts', function(req,res){
+		res.json(req.user.podcasts);
+	})
+
 	//testing the server
 	app.get('/', function(req, res){
 		//console.log(req.user);
@@ -177,7 +168,7 @@ module.exports = function(app, passport){
 
 	app.post('/',function(req,res){
 		//console.log(req);
-		console.log(req.body)
+		getEpisodeDataFromRSSFeed(req, res);
 	});
 
 	// load login page

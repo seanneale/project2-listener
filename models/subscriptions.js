@@ -6,7 +6,8 @@ var subscriptionSchema = new mongoose.Schema({
 	description: String,
 	rssFeedLoc: String,
 	episodes: [episode.schema],
-	favourited: Boolean
+	favourited: Boolean,
+	lastUpdate: Date
 },{
 	timestamps: true
 });

@@ -1,48 +1,19 @@
 extends layout.pug
 
 block title
-	title episodes
+	title The Listener - Episodes
 
 block content
 	include includes/header-logged-in.pug
 	.row
 		#search
 	.row
+		audio(src='http://open.live.bbc.co.uk/mediaselector/5/redir/version/2.0/mediaset/audio-nondrm-download/proto/http/vpid/p049zzfy.mp3', preload='auto')
+	.row
 		.col-lg-10.col-lg-offset-1
 			.row
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-3.col-sm-4.col-xs-6
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
+				#episodeDisplay
 
 
+block script
+	script(type='text/javascript', src='js/episodes.js')
