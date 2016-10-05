@@ -226,42 +226,42 @@ var subs1 = subscriptionsReq({
 // var letsTalkAboutTech = 'http://www.bbc.co.uk/programmes/p02nrxgq/episodes/downloads.rss';
 
 
-// function getSubsDataFromRSSFeed (rssFeed){
-// 	var FeedParser = require('feedparser')
-// 	  , request = require('request');
+// // function getSubsDataFromRSSFeed (rssFeed){
+// // 	var FeedParser = require('feedparser')
+// // 	  , request = require('request');
 
-// 	var req = request(rssFeed)
-// 	  , feedparser = new FeedParser();
+// // 	var req = request(rssFeed)
+// // 	  , feedparser = new FeedParser();
 
-// 	req.on('error', function (error) {
-// 	  // handle any request errors
-// 	});
-// 	req.on('response', function (res) {
-// 	  var stream = this;
+// // 	req.on('error', function (error) {
+// // 	  // handle any request errors
+// // 	});
+// // 	req.on('response', function (res) {
+// // 	  var stream = this;
 
-// 	  if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
+// // 	  if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
 
-// 	  stream.pipe(feedparser);
-// 	});
+// // 	  stream.pipe(feedparser);
+// // 	});
 
 
-// 	feedparser.on('error', function(error) {
-// 	  // always handle errors
-// 	});
-// 	feedparser.on('readable', function() {
-// 	  // This is where the action is!
-// 	  var stream = this
-// 	    , meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
-// 	    , item;
+// // 	feedparser.on('error', function(error) {
+// // 	  // always handle errors
+// // 	});
+// // 	feedparser.on('readable', function() {
+// // 	  // This is where the action is!
+// // 	  var stream = this
+// // 	    , meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
+// // 	    , item;
 
-// 	  while (item = stream.read()) {
-// 	  	console.log(item);
-// 	  	var wantedInfo = {name: item.meta.title, description: item.meta.description, link: item.meta.link}
-// 	    console.log(wantedInfo);
-// 	    return wantedInfo;
-// 	  }
-// 	});
-// }
+// // 	  while (item = stream.read()) {
+// // 	  	console.log(item);
+// // 	  	var wantedInfo = {name: item.meta.title, description: item.meta.description, link: item.meta.link}
+// // 	    console.log(wantedInfo);
+// // 	    return wantedInfo;
+// // 	  }
+// // 	});
+// // }
 
 // function getEpisodeDataFromRSSFeed (rssFeed){
 // 	var episodeArray = [];
@@ -299,11 +299,7 @@ var subs1 = subscriptionsReq({
 // 	  		var image = item.image;
 // 	  	}
 // 	  	// console.log(item.meta);
-// 	  	console.log(item.date);
-// 	  	console.log('before = '+item.date);
-// 	  	var date = new Date();
-// 	  	console.log('after = '+date);
-// 		console.log(typeof date );
+// 	  	console.log(item.enclosures[0].url);
 // 	  	var wantedInfo = {episodeName: item.title,	episodeInfo: item.description, episodeLoc: item.link, image: image, releaseDate: item.date};
 // 	  	episodeArray.push(wantedInfo);
 // 	  	// console.log(episodeArray.length);
@@ -318,13 +314,13 @@ var subs1 = subscriptionsReq({
 // //	console.log(episodeArray);
 // }
 
-// // // // getEpisodeDataFromRSSFeed(letsTalkAboutTech);
-// getEpisodeDataFromRSSFeed(dannyBaker);
-// // // // getEpisodeDataFromRSSFeed(theBugle);
-// // // // getEpisodeDataFromRSSFeed(answerMeThis);
+// getEpisodeDataFromRSSFeed(letsTalkAboutTech);
+// // getEpisodeDataFromRSSFeed(dannyBaker);
+// getEpisodeDataFromRSSFeed(theBugle);
+// getEpisodeDataFromRSSFeed(answerMeThis);
 
-// // // function test (rssFeed){
-// // // 	getEpisodeDataFromRSSFeed(rssFeed);
-// // // }
+// // // // function test (rssFeed){
+// // // // 	getEpisodeDataFromRSSFeed(rssFeed);
+// // // // }
 
-// // // test(dannyBaker);
+// // // // test(dannyBaker);

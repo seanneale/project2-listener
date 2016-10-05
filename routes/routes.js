@@ -10,6 +10,30 @@ var briefingRoom = 'http://www.bbc.co.uk/programmes/b07cblx9/episodes/downloads.
 var dannyBaker = 'http://www.bbc.co.uk/programmes/b00mjjxr/episodes/downloads.rss';
 var letsTalkAboutTech = 'http://www.bbc.co.uk/programmes/p02nrxgq/episodes/downloads.rss';
 
+function markEpisodeAsPlayed(req,res){
+	var episode = req.body.episodeID;
+	var user = req.user.username;
+	userReq.findOne({username: user},function(err,user){
+		if(err){
+			console.log(err);
+		}
+		//console.log(user.podcasts);
+		for(var i = 0; i < user.podcasts.length; i++){
+			for(var j = 0; j < user.podcasts[i].playedEpisodes.length;j++){
+				if(episode == user.podcasts[i].playedEpisodes[j].episode._id){
+					user.podcasts[i].playedEpisodes[j].played = true;
+				}
+			}
+			
+		}
+		user.save(function(){
+			if(err){
+				console.log(err);
+			}
+			console.log('episode marked as played');	
+		})
+	})
+}
 
 var addEpisodesToUser = function(user,newPod){
 	//only use this function to when adding a new subscription to the user
@@ -79,7 +103,7 @@ function getEpisodeDataFromRSSFeed (req, res){
 	  	} else {
 	  		var image = item.image;
 	  	}
-	  	var wantedInfo = {episodeName: item.title,	episodeInfo: item.description, episodeLoc: item.link, image: image, releaseDate: item.date};
+	  	var wantedInfo = {episodeName: item.title,	episodeInfo: item.description, episodeLoc: item.enclosures[0].url, image: image, releaseDate: item.date};
 	  	episodeArray.push(wantedInfo);
 		subInfo = {name: item.meta.title, description: item.meta.description, link: item.meta.link, lastUpdate: item.meta.date}
 	  	// console.log(episodeArray.length);
@@ -154,6 +178,10 @@ module.exports = function(app, passport){
 		}
 		res.redirect('/')
 	}
+
+	app.put('/playedepisode', function(req,res){
+		markEpisodeAsPlayed(req,res);
+	})
 
 	app.get('/userpodcasts', function(req,res){
 		res.json(req.user.podcasts);
