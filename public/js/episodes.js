@@ -43,7 +43,6 @@ function convertMonth(x){
 
 function dateConvert(date){
 	var date = new Date(date)
-	console.log(date);
 	return convertDate(date.getDate())+' '+convertMonth(date.getMonth());
 }
 
@@ -78,7 +77,7 @@ function loadEpisodeDisplay(){
 		arraySort(unsrtArray);
 		//updating the episode display
 		var limit = 12;
-		if(unsrtArray.length < 50) {
+		if(unsrtArray.length < limit) {
 			limit = unsrtArray.length;
 		}
 		for(var i = 0; i < limit; i ++){

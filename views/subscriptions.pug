@@ -7,29 +7,6 @@ block content
 	include includes/header-logged-in.pug
 	.row
 		#search
-	.row
-		.col-lg-10.col-lg-offset-1.col-xs-12
-			.row.subscription
-				.col-lg-4
-					img.img-fluid(src='https://i1.sndcdn.com/artworks-000150515020-01uh91-t500x500.jpg')
-				.col-lg-8
-					.row
-						h1 Podcast Name
-						ul
-							li 
-								h5 Episode 7 September 30th, 2016
-							li 
-								h5 Episode 6 September 23rd, 2016
-							li 
-								h5 Episode 5 September 16th, 2016
-							li 
-								h5 Episode 4 September 9th, 2016
-							li 
-								h5 Episode 3 September 2nd, 2016
-					.row
-						.col-lg-4#showAllEpisodes
-							h3 Show All Episodes
-						.col-lg-4#markAllAsListened
-							h3 Mark All As Listened
-						.col-lg-4#deletePodcast
-							h3 Delete Podcast
+	.row#subsDisplay
+block script
+	script(type='text/javascript', src='js/subscriptions.js')

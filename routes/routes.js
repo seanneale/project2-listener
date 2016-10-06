@@ -10,6 +10,57 @@ var briefingRoom = 'http://www.bbc.co.uk/programmes/b07cblx9/episodes/downloads.
 var dannyBaker = 'http://www.bbc.co.uk/programmes/b00mjjxr/episodes/downloads.rss';
 var letsTalkAboutTech = 'http://www.bbc.co.uk/programmes/p02nrxgq/episodes/downloads.rss';
 
+function removeSubsFromUser(req,res){
+	var targetSub = req.body.name;
+	var username = req.user.username;
+	userReq.findOne({username: username}, function(err,user){
+		if(err){
+			console.log(err);
+		}
+		//find the targetted subscription
+		for(var i = 0; i < user.podcasts.length; i++){
+			if(targetSub == user.podcasts[i].podcast.name){
+				console.log(targetSub);
+				//remove from the array
+				user.podcasts.splice(i,1);
+			}
+		}
+		//save the changes to the user
+		user.save(function(){
+			if(err){
+				console.log(err);
+			}
+			console.log(targetSub + " deleted");	
+		})
+	})
+}
+
+function markAllEpisodesAsPlayed(req,res){
+	var targetSub = req.body.name;
+	var username = req.user.username;
+	userReq.findOne({username: username}, function(err,user){
+		if(err){
+			console.log(err);
+		}
+		//search user podcasts
+		//for the target podcast
+		for(var i = 0; i < user.podcasts.length; i++){
+			if(targetSub == user.podcasts[i].podcast.name){
+				for(var j = 0; j < user.podcasts[i].playedEpisodes.length; j++){
+					user.podcasts[i].playedEpisodes[j].played = true;
+					console.log(user.podcasts[i].playedEpisodes[j].played);
+				}
+			}
+		}
+		user.save(function(){
+			if(err){
+				console.log(err);
+			}
+			console.log('episode marked as played');	
+		})
+	})
+}
+
 function markEpisodeAsPlayed(req,res){
 	var episode = req.body.episodeID;
 	var user = req.user.username;
@@ -179,8 +230,16 @@ module.exports = function(app, passport){
 		res.redirect('/')
 	}
 
+	app.delete('/removesubs', function(req,res){
+		removeSubsFromUser(req,res);
+	})
+
 	app.put('/playedepisode', function(req,res){
 		markEpisodeAsPlayed(req,res);
+	})
+
+	app.put('/playedepisodes', function(req,res){
+		markAllEpisodesAsPlayed(req,res);
 	})
 
 	app.get('/userpodcasts', function(req,res){
