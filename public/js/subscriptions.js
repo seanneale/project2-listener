@@ -1,5 +1,6 @@
 var subscriptionTemplate = '<div class="col-lg-10 col-lg-offset-1 col-xs-12"><div class="row subscription"><div class="col-lg-4"><img class="img-fluid" src="REPLACEIMAGELOC"></div><div class="col-lg-8"><div class="row"><h1>REPLACEPODCASTNAME</h1><ul></ul></div><div class="row"><div class="col-lg-4 showAllEpisodes"><h3>Show All Episodes</h3></div><div class="col-lg-4 markAllAsListened"><h3>Mark All As Listened</h3></div><div class="col-lg-4 deletePodcast"><h3>Delete Podcast</h3></div></div></div></div></div>'
 
+var showTracker = 1;
 
 function convertDate(c){
 	if(c == 1 || c == 21 || c == 31){
@@ -117,9 +118,17 @@ function buildSubsPage(){
 		$('.showAllEpisodes').unbind().click(function(){
 			//remove class 'hide' for all episodes of this podcast
 			var target = $(this).parent().parent().children().children('ul').children();
-			for(var k =0; k < target.length; k++){
-				$(target).removeClass('hide');	
+			//change name 
+			showTracker = (-1)*showTracker;
+			for(var k = 5; k < target.length; k++){
+				$(target[k]).toggleClass('hide');
+			}	
+			if(showTracker > 0){
+				$(this).html('<h3>Show All Episodes</h3>');
+			} else {
+				$(this).html('<h3>Hide Episodes</h3>');
 			}
+
 		})
 		$('.markAllAsListened').unbind().click(function(e){
 			console.log('#markAllAsListened');
@@ -132,6 +141,7 @@ function buildSubsPage(){
 			sendMarkAllEpisodesAsPlayed(podcastName);
 		})
 		$('.deletePodcast').unbind().click(function(){
+			$(this).parent().parent().parent().addClass('hide');
 			console.log('#deletePodcast');
 			var podcastName = $(this).parent().parent().children().children('h1').text();
 			sendDeleteSubs(podcastName);

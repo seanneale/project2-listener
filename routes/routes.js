@@ -121,6 +121,7 @@ function getEpisodeDataFromRSSFeed (req, res){
 	var username = req.user.username;
 	var episodeArray = [];
 	var subInfo = {};
+	var rssFeedLoc = req.body.newPodcastUrl;
 	var FeedParser = require('feedparser')
 	  , request = require('request');
 
@@ -156,7 +157,7 @@ function getEpisodeDataFromRSSFeed (req, res){
 	  	}
 	  	var wantedInfo = {episodeName: item.title,	episodeInfo: item.description, episodeLoc: item.enclosures[0].url, image: image, releaseDate: item.date};
 	  	episodeArray.push(wantedInfo);
-		subInfo = {name: item.meta.title, description: item.meta.description, link: item.meta.link, lastUpdate: item.meta.date}
+		subInfo = {name: item.meta.title, description: item.meta.description, link: rssFeedLoc, lastUpdate: item.meta.date}
 	  	// console.log(episodeArray.length);
 	    // console.log(wantedInfo);
 	    // return wantedInfo;
@@ -177,6 +178,7 @@ function getEpisodeDataFromRSSFeed (req, res){
 					addPodcastToUser(username,subs);
 	            } else {
 	            	var newSub = new subscriptionsReq();
+	            	newSub.rssFeedLoc = rssFeedLoc
 	            	newSub.episodes = [];
 	            	newSub.name = subInfo.name;
 	            	newSub.description = subInfo.description;

@@ -91,6 +91,7 @@ function loadEpisodeDisplay(){
 		}
 		$('audio').on('ended', function(event){
 			markEpisodeAsPlayed(event.target.id);
+			$(this).parent().addClass('hide');
 		});
 	})
 	console.log('...loaded');

@@ -86,29 +86,29 @@ var addEpisodesToUser = function(user,newPod){
 	}
 }
 
-var episode1 = episodesReq({
-//	podcastName: [],
-	episodeName: 'A Bugle update',
-	episodeInfo: 'An update on the NEW NEW Bugle...',
-	episodeLoc: 'http://www.podtrac.com/pts/redirect.mp3/feeds.soundcloud.com/stream/283199168-the-bugle-a-bugle-update.mp3',
-	image: 'http://i1.sndcdn.com/avatars-000036816294-7qogzv-original.jpg'
-})
+// var episode1 = episodesReq({
+// //	podcastName: [],
+// 	episodeName: 'A Bugle update',
+// 	episodeInfo: 'An update on the NEW NEW Bugle...',
+// 	episodeLoc: 'http://www.podtrac.com/pts/redirect.mp3/feeds.soundcloud.com/stream/283199168-the-bugle-a-bugle-update.mp3',
+// 	image: 'http://i1.sndcdn.com/avatars-000036816294-7qogzv-original.jpg'
+// })
 
-var episode2 = episodesReq({
-//	podcastsName
-	episodeName: "AMT340: Fitbits, Whale Poo and Mushy Peas",
-	episodeInfo:"Listeners, how terribly remiss of us to make it through three quarters of 2016 without marking the fact that it has been designated by the UN as the International Year of Pulses. But thankfully there's still three months of it in which to celebrate, starting with a pulverised pea party in AMT340. Find out more about the episode at http://answermethispodcast.com/episode340.  Tweet us http://twitter.com/helenandolly Be our Facebook friend at http://facebook.com/answermethis Subscribe on iTunes http://iTunes.com/AnswerMeThis Buy old episodes and albums at http://answermethisstore.com",
-	episodeLoc: 'http://www.podtrac.com/pts/redirect.mp3/traffic.libsyn.com/answermethis/Answer_Me_This_Episode_340.mp3',
-	image: "http://static.libsyn.com/p/assets/9/1/b/9/91b92836b7bd137c/cover-art-2015ii.jpg"
-})
+// var episode2 = episodesReq({
+// //	podcastsName
+// 	episodeName: "AMT340: Fitbits, Whale Poo and Mushy Peas",
+// 	episodeInfo:"Listeners, how terribly remiss of us to make it through three quarters of 2016 without marking the fact that it has been designated by the UN as the International Year of Pulses. But thankfully there's still three months of it in which to celebrate, starting with a pulverised pea party in AMT340. Find out more about the episode at http://answermethispodcast.com/episode340.  Tweet us http://twitter.com/helenandolly Be our Facebook friend at http://facebook.com/answermethis Subscribe on iTunes http://iTunes.com/AnswerMeThis Buy old episodes and albums at http://answermethisstore.com",
+// 	episodeLoc: 'http://www.podtrac.com/pts/redirect.mp3/traffic.libsyn.com/answermethis/Answer_Me_This_Episode_340.mp3',
+// 	image: "http://static.libsyn.com/p/assets/9/1/b/9/91b92836b7bd137c/cover-art-2015ii.jpg"
+// })
 
-var subs1 = subscriptionsReq({
-	name: 'The Bugle',
-	description: 'John Oliver and Andy Zaltzman, the transatlantic region’s leading bi-continental satirical double-act, leave no hot potato unbuttered in their worldwide-hit weekly topical comedy show.',
-	rssFeedLoc: 'http://feeds.feedburner.com/thebuglefeed',
-	episodes: [episode1,episode2],
-	favourited: true
-})
+// var subs1 = subscriptionsReq({
+// 	name: 'The Bugle',
+// 	description: 'John Oliver and Andy Zaltzman, the transatlantic region’s leading bi-continental satirical double-act, leave no hot potato unbuttered in their worldwide-hit weekly topical comedy show.',
+// 	rssFeedLoc: 'http://feeds.feedburner.com/thebuglefeed',
+// 	episodes: [episode1,episode2],
+// 	favourited: true
+// })
 
 //console.log(subs1)
 
@@ -324,3 +324,119 @@ var subs1 = subscriptionsReq({
 // // // // }
 
 // // // // test(dannyBaker);
+
+function creatingNewEpisodes(object){
+	subscriptionsReq.findById(object.id,function(err,subs){
+		for(var i = object.newEpisodes.length - 1; i >= 0; i--){
+			// console.log(object.newEpisodes[i]);
+			console.log(subs.episodes);
+			var newEp = new episodesReq();
+			newEp.episodeName = object.newEpisodes[i].episodeName;
+			newEp.episodeInfo = object.newEpisodes[i].episodeInfo;
+			newEp.episodeLoc = object.newEpisodes[i].episodeLoc;
+			newEp.image = object.newEpisodes[i].image;
+			newEp.releaseDate = object.newEpisodes[i].releaseDate;
+			// console.log(newEp);
+			subs.episodes.unshift(newEp);
+			newEp.save(function(err){
+				if(err){
+					console.log(err);
+				}
+				console.log('episode created'); 
+				console.log(subs.episodes);  					
+			})
+			subs.save(function(err){
+				if(err){
+					console.log(err);
+				}
+				console.log('episode added')
+			})
+		}
+	})
+
+};
+
+function checkForUpdates(object,res){
+	var rssFeedLoc = object.feed;
+	var FeedParser = require('feedparser')
+	, request = require('request');
+	var req = request(rssFeedLoc)
+	, feedparser = new FeedParser();
+	req.on('error', function (error) {
+		// handle any request errors
+	});
+	req.on('response', function (resp) {
+		var stream = this;
+		if (resp.statusCode != 200) return this.emit('error', new Error('Bad status code'));
+		stream.pipe(feedparser);
+	});
+	feedparser.on('error', function(error) {
+		// always handle errors
+	});
+	feedparser.on('readable', function() {
+		// This is where the action is!
+		var stream = this
+		, meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
+		, item;	    
+		if (item = stream.read()) {
+			// console.log(object.date - item.meta.date);
+			if(object.date - item.meta.date < 0){
+				// object.updated = true;
+				console.log(object.date - item.date < 0);
+				if(object.date - item.date < 0){
+				  	if(item.image = {}){
+				  		var image = item.meta.image.url;
+				  	} else {
+				  		var image = item.image;
+				  	}
+				  	var wantedInfo = {episodeName: item.title,	episodeInfo: item.description, episodeLoc: item.enclosures[0].url, image: image, releaseDate: item.date};
+				  	object.newEpisodes.push(wantedInfo);
+				  	creatingNewEpisodes(object);
+		  		}
+			}
+		}
+	});
+	// feedparser.on('finish',function(){
+	// 	console.log(object.updated);
+	// 	if(object.updated){
+	// 		console.log('hey');
+	// 		//start functions here
+	// 		//find episodes published since last update
+	// 		// addingEpisodesAfterUpdate(object);
+	// 		//find the users subscribed to the podcast
+	// 		//rebuild the episode array to include the new episodes
+	// 		//add the new episode to each subscriber with played set to false (unshift() will put it at the start of the array not the end)
+	// 	} else {
+	// 		console.log('hey-yo');
+	// 	}
+	// })
+}
+
+function refreshSubscriptions(){
+	var subsArray = []
+	//find ALL podcasts and save required info
+	subscriptionsReq.find({}, function(err, subs) {
+		if (err) throw err;
+		// object of all the users
+		for(var i = 0; i < subs.length; i++){
+			subsArray.push({date: subs[i].lastUpdate, feed: subs[i].rssFeedLoc, id: subs[i]._id, updated: false, newEpisodes: []})
+		}
+		// console.log(subsArray);
+		for(var i = 0; i < 1; i++){
+			checkForUpdates(subsArray[i]);	
+		}
+		
+	});
+
+}
+
+function refreshMonitor(){
+	// setTimeout(function(){
+	// 	console.log('Looking for updates...');
+	// 	refreshSubscriptions();
+	// 	refreshMonitor();
+	// },60000);
+	refreshSubscriptions();
+}
+
+refreshMonitor();
