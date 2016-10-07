@@ -17,3 +17,4 @@ exclude_paths:
 - "public/lib/js/mdb.min.js"
 - "public/lib/js/tether.js"
 - "public/lib/js/tether.min.js"
+- "node_modules/**"
