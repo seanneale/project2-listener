@@ -1,5 +1,4 @@
-podcastTemplate = '<div class="podcastEpisode col-lg-3 col-sm-4 col-xs-6"><div class="image"><img class="img-fluid" src="IMAGEREPLACE"><div class="podcastText"><h2><span>EPISODENAMEREPLACE<span class="spacer"></span><br /><span class="spacer"></span>EPISODERELEASEDATE</span></h2></div></div><audio id="EPISODEID" controls="controls" preload="none" src="EPISODELOCREPLACE">Your browser does not support the HTML5 Audio element.</audio></div>'
-//<audio src="EPISODELOCREPLACE" preload="auto" />
+var podcastTemplate = '<div class="podcastEpisode col-lg-3 col-sm-4 col-xs-6"><img class="img-fluid" src="IMAGEREPLACE"><audio id="EPISODEID" controls="controls" preload="none" src="EPISODELOCREPLACE">Your browser does not support the HTML5 Audio element.</audio><h2><span>EPISODENAMEREPLACE<span class="spacer"></span><br /><span class="spacer"></span><span class="releaseDate">EPISODERELEASEDATE</span></span></h2></div>'
 
 function convertDate(c){
 	if(c == 1 || c == 21 || c == 31){
@@ -76,7 +75,7 @@ function loadEpisodeDisplay(){
 		//sorting the array into date order from most recently to least recently released
 		arraySort(unsrtArray);
 		//updating the episode display
-		var limit = 12;
+		var limit = 50;
 		if(unsrtArray.length < limit) {
 			limit = unsrtArray.length;
 		}

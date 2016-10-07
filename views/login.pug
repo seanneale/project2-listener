@@ -7,9 +7,6 @@ block content
 	include includes/header-logged-out.pug
 	.row
 		.col-sm-10.col-sm-offset-1
-			.row#buttons
-				#loginBtn Login
-				#signupBtn Sign Up
 			.row#login
 				.container.col-sm-4.col-sm-offset-4
 					form.form-signin
@@ -25,7 +22,10 @@ block content
 						.checkbox
 						|  
 						button.btn.btn-lg.btn-primary.btn-block#loginSubmitBtn(type='submit') Sign in
-			.row#signUp
+					.row
+						p To sign up please click 
+							a.switch here
+			.row#signUp.hide
 				.container.col-sm-4.col-sm-offset-4
 					form.form-signup
 						h2.form-signin-heading Please sign up
@@ -40,3 +40,6 @@ block content
 						.checkbox
 						|  
 						button.btn.btn-lg.btn-primary.btn-block#signUpSubmitBtn(type='submit') Sign up
+					.row
+						p To sign in please click 
+							a.switch here

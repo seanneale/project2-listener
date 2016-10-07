@@ -52,10 +52,19 @@ function addNewPodcast(e){
 	})
 }
 
+function swap(e){
+	e.preventDefault();
+	$('#login').toggleClass('hide');
+	$('#signUp').toggleClass('hide');
+}
+
 
 $(document).ready(function(){
 	console.log('ready');
 	$('#loginSubmitBtn').on('click',login);
 	$('#signUpSubmitBtn').on('click',signUp);
 	$('#newPodcast').on('click',addNewPodcast);
+	$('.switch').on('click',swap);
+	$('.waves-effect').removeClass('waves-effect');
+	$('.waves-light').removeClass('waves-light');
 })

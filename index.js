@@ -325,118 +325,182 @@ var addEpisodesToUser = function(user,newPod){
 
 // // // // test(dannyBaker);
 
-function creatingNewEpisodes(object){
-	subscriptionsReq.findById(object.id,function(err,subs){
-		for(var i = object.newEpisodes.length - 1; i >= 0; i--){
-			// console.log(object.newEpisodes[i]);
-			console.log(subs.episodes);
-			var newEp = new episodesReq();
-			newEp.episodeName = object.newEpisodes[i].episodeName;
-			newEp.episodeInfo = object.newEpisodes[i].episodeInfo;
-			newEp.episodeLoc = object.newEpisodes[i].episodeLoc;
-			newEp.image = object.newEpisodes[i].image;
-			newEp.releaseDate = object.newEpisodes[i].releaseDate;
-			// console.log(newEp);
-			subs.episodes.unshift(newEp);
-			newEp.save(function(err){
-				if(err){
-					console.log(err);
-				}
-				console.log('episode created'); 
-				console.log(subs.episodes);  					
-			})
-			subs.save(function(err){
-				if(err){
-					console.log(err);
-				}
-				console.log('episode added')
-			})
-		}
-	})
+///////////////////////////////////////////////////
+// Refresh Code Below
+////////////////////////////////////////////////////
 
-};
+// function episodeCompare(sub,user,loc){
+// 	console.log('arrow');
+// 	var userEpID = user.podcasts[loc].playedEpisodes[0].episode._id;
+// 	var i = 0;
+// 	var flag = false;
 
-function checkForUpdates(object,res){
-	var rssFeedLoc = object.feed;
-	var FeedParser = require('feedparser')
-	, request = require('request');
-	var req = request(rssFeedLoc)
-	, feedparser = new FeedParser();
-	req.on('error', function (error) {
-		// handle any request errors
-	});
-	req.on('response', function (resp) {
-		var stream = this;
-		if (resp.statusCode != 200) return this.emit('error', new Error('Bad status code'));
-		stream.pipe(feedparser);
-	});
-	feedparser.on('error', function(error) {
-		// always handle errors
-	});
-	feedparser.on('readable', function() {
-		// This is where the action is!
-		var stream = this
-		, meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
-		, item;	    
-		if (item = stream.read()) {
-			// console.log(object.date - item.meta.date);
-			if(object.date - item.meta.date < 0){
-				// object.updated = true;
-				console.log(object.date - item.date < 0);
-				if(object.date - item.date < 0){
-				  	if(item.image = {}){
-				  		var image = item.meta.image.url;
-				  	} else {
-				  		var image = item.image;
-				  	}
-				  	var wantedInfo = {episodeName: item.title,	episodeInfo: item.description, episodeLoc: item.enclosures[0].url, image: image, releaseDate: item.date};
-				  	object.newEpisodes.push(wantedInfo);
-				  	creatingNewEpisodes(object);
-		  		}
-			}
-		}
-	});
-	// feedparser.on('finish',function(){
-	// 	console.log(object.updated);
-	// 	if(object.updated){
-	// 		console.log('hey');
-	// 		//start functions here
-	// 		//find episodes published since last update
-	// 		// addingEpisodesAfterUpdate(object);
-	// 		//find the users subscribed to the podcast
-	// 		//rebuild the episode array to include the new episodes
-	// 		//add the new episode to each subscriber with played set to false (unshift() will put it at the start of the array not the end)
-	// 	} else {
-	// 		console.log('hey-yo');
-	// 	}
-	// })
-}
+// 	while(!flag){
+// 		console.log(i);
+// 		console.log(user.podcasts[loc].playedEpisodes[0].episode._id == sub.episodes[i]._id)
+// 		console.log(sub.episodes[i]._id);
+// 		console.log(user.podcasts[loc].playedEpisodes[0].episode._id);
+// 		if(userEpID == sub.episodes[i]._id){
+			
+// 			console.log(userEpID);
+// 			console.log(sub.episodes[i]._id);
+// 			flag = true;
 
-function refreshSubscriptions(){
-	var subsArray = []
-	//find ALL podcasts and save required info
-	subscriptionsReq.find({}, function(err, subs) {
-		if (err) throw err;
-		// object of all the users
-		for(var i = 0; i < subs.length; i++){
-			subsArray.push({date: subs[i].lastUpdate, feed: subs[i].rssFeedLoc, id: subs[i]._id, updated: false, newEpisodes: []})
-		}
-		// console.log(subsArray);
-		for(var i = 0; i < 1; i++){
-			checkForUpdates(subsArray[i]);	
-		}
-		
-	});
+// 		}
+// 		if(i ==  sub.episodes.length-1){
+// 			break;
 
-}
+// 		} else {
+// 			i++;
+// 		}
+// 	}
+// }
 
-function refreshMonitor(){
-	// setTimeout(function(){
-	// 	console.log('Looking for updates...');
-	// 	refreshSubscriptions();
-	// 	refreshMonitor();
-	// },60000);
-	refreshSubscriptions();
-}
+// function feedCompare(sub, user, loc){
+// 	var subID = sub.episodes[0]._id;
+// 	var userEpID = user.podcasts[loc].playedEpisodes[0].episode._id;
+// 	if(subID != userEpID){
+// 		console.log('no match');
+// 		episodeCompare(sub,user,loc);
+// 	}
+// }
 
-refreshMonitor();
+// function subsMatch(){
+// 	userReq.find({}, function(err, users) {
+// 		if(err){
+// 			console.log(err);
+// 		}
+// 		subscriptionsReq.find({}, function(err, subs){
+// 			if(err){
+// 				console.log(err);
+// 			}
+// 			for(var i = 0; i < users.length; i++){
+// 			// console.log(users[i].podcasts);
+// 				for(var j = 0; j < 1; j++){
+// 				// for(var j = 0; j < users[i].podcasts.length; j++){
+// 					for(var k = 0; k < subs.length; k++){
+// 						if(subs[k].name == users[i].podcasts[j].podcast.name){
+// 							console.log('Fuck Yeah');
+// 							feedCompare(subs[k],users[i],j)
+// 						}
+// 					}
+// 				}	
+// 			}
+// 		})
+// 	});
+// }
+
+// subsMatch();
+
+// function creatingNewEpisodes(object){
+// 	subscriptionsReq.findById(object.id,function(err,subs){
+// 		for(var i = object.newEpisodes.length - 1; i >= 0; i--){
+// 			// console.log(object.newEpisodes[i]);
+// 			var newEp = new episodesReq();
+// 			newEp.episodeName = object.newEpisodes[i].episodeName;
+// 			newEp.episodeInfo = object.newEpisodes[i].episodeInfo;
+// 			newEp.episodeLoc = object.newEpisodes[i].episodeLoc;
+// 			newEp.image = object.newEpisodes[i].image;
+// 			newEp.releaseDate = object.newEpisodes[i].releaseDate;
+// 			// console.log(newEp);
+// 			subs.episodes.unshift(newEp);
+// 			newEp.save(function(err){
+// 				if(err){
+// 					console.log(err);
+// 				}
+// 				console.log('episode created'); 
+// 			})
+// 			subs.save(function(err){
+// 				if(err){
+// 					console.log(err);
+// 				}
+// 				console.log('episode added')
+// 			})
+// 		}
+// 	})
+
+// };
+
+// function checkForUpdates(object,res){
+// 	var rssFeedLoc = object.feed;
+// 	var FeedParser = require('feedparser')
+// 	, request = require('request');
+// 	var req = request(rssFeedLoc)
+// 	, feedparser = new FeedParser();
+// 	req.on('error', function (error) {
+// 		// handle any request errors
+// 	});
+// 	req.on('response', function (resp) {
+// 		var stream = this;
+// 		if (resp.statusCode != 200) return this.emit('error', new Error('Bad status code'));
+// 		stream.pipe(feedparser);
+// 	});
+// 	feedparser.on('error', function(error) {
+// 		// always handle errors
+// 	});
+// 	feedparser.on('readable', function() {
+// 		// This is where the action is!
+// 		var stream = this
+// 		, meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
+// 		, item;	    
+// 		if (item = stream.read()) {
+// 			// console.log(object.date - item.meta.date);
+// 			if(object.date - item.meta.date < 0){
+// 				// object.updated = true;
+// 				if(object.date - item.date < 0){
+// 				  	if(item.image = {}){
+// 				  		var image = item.meta.image.url;
+// 				  	} else {
+// 				  		var image = item.image;
+// 				  	}
+// 				  	var wantedInfo = {episodeName: item.title,	episodeInfo: item.description, episodeLoc: item.enclosures[0].url, image: image, releaseDate: item.date};
+// 				  	object.newEpisodes.push(wantedInfo);
+// 				  	creatingNewEpisodes(object);
+// 		  		}
+// 			}
+// 		}
+// 	});
+// 	// feedparser.on('finish',function(){
+// 	// 	console.log(object.updated);
+// 	// 	if(object.updated){
+// 	// 		console.log('hey');
+// 	// 		//start functions here
+// 	// 		//find episodes published since last update
+// 	// 		// addingEpisodesAfterUpdate(object);
+// 	// 		//find the users subscribed to the podcast
+// 	// 		//rebuild the episode array to include the new episodes
+// 	// 		//add the new episode to each subscriber with played set to false (unshift() will put it at the start of the array not the end)
+// 	// 	} else {
+// 	// 		console.log('hey-yo');
+// 	// 	}
+// 	// })
+// }
+
+// function refreshSubscriptions(){
+// 	var subsArray = []
+// 	//find ALL podcasts and save required info
+// 	subscriptionsReq.find({}, function(err, subs) {
+// 		if (err) throw err;
+// 		// object of all the users
+// 		for(var i = 0; i < subs.length; i++){
+// 			subsArray.push({date: subs[i].lastUpdate, feed: subs[i].rssFeedLoc, id: subs[i]._id, updated: false, newEpisodes: []})
+// 		}
+// 		// console.log(subsArray);
+// 		for(var i = 0; i < 1; i++){
+// 			checkForUpdates(subsArray[i]);	
+// 		}		
+// 	});
+
+// }
+
+// function refreshMonitor(){
+// 	// setTimeout(function(){
+// 	// 	console.log('Looking for updates...');
+// 	// 	refreshSubscriptions();
+// 	//  create a function that updates the last update time for each sub based on latest update time of an episode
+// 	// 	refreshMonitor();
+// 	// },60000);
+// 	refreshSubscriptions();
+// }
+
+// refreshMonitor();
