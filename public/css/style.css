@@ -112,7 +112,7 @@ header h1 span {
 
 .subscription ul {
 	list-style-type: none;
-	font-size: 20px;
+	font-size: 18px;
 }
 
 .subscription h1 {
@@ -121,6 +121,10 @@ header h1 span {
 
 .played {
 	color: grey;
+}
+
+.showAllEpisodes h3 {
+	width: 300px;
 }
 
 .logout {
