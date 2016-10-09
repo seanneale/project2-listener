@@ -1,3 +1,25 @@
+function convertDate(c){
+	if(c === 1 || c === 21 || c === 31){
+		return (c + 'st');
+	} else if(c === 2 | c === 22){
+		return (c + 'nd');
+	} else if(c === 3 | c === 23){
+		return (c + 'rd');
+	} else {
+		return ( c + 'th');
+	}
+}
+
+function convertMonth(x){
+	var months = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+	return months[x];
+}
+
+function dateConvert(date){
+	var targetDate = new Date(date)
+	return convertDate(targetDate.getDate())+' '+convertMonth(targetDate.getMonth());
+}
+
 function login(e){
 	e.preventDefault();
 	var input = $('#login input');

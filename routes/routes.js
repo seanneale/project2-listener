@@ -129,7 +129,9 @@ function getEpisodeDataFromRSSFeed (req, res){
 	  , feedparser = new FeedParser();
 
 	req.on('error', function (error) {
-	  // handle any request errors
+		if(err){
+			console.log(err);
+		}
 	});
 	req.on('response', function (resp) {
 	  var stream = this;
@@ -141,10 +143,11 @@ function getEpisodeDataFromRSSFeed (req, res){
 
 
 	feedparser.on('error', function(error) {
-	  // always handle errors
+		if(err){
+			console.log(err);
+		}
 	});
 	feedparser.on('readable', function() {
-	  // This is where the action is!
 	  var stream = this
 	    , meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
 	    , item;	    
