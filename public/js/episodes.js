@@ -50,6 +50,20 @@ function loadEpisodeDisplay(){
 	console.log('...loaded');
 }
 
+function addNewPodcast(e){
+	e.preventDefault();
+	var newPodcastUrl = $('#newPodcastEntry').val();
+	console.log(typeof(newPodcastUrl));
+
+	$.ajax({
+		method: 'POST',
+		url: '/',
+		data: {newPodcastUrl: newPodcastUrl}
+	}).done(function(){
+		window.location.href = '/episodes'
+	})
+}
+
 function markEpisodeAsPlayed (id) {
 	$.ajax({
 		method: 'PUT',
@@ -61,6 +75,7 @@ function markEpisodeAsPlayed (id) {
 }
 
 $(document).ready(function(){
+	$('#newPodcast').on('click',addNewPodcast);
 	console.log('also ready');
 	loadEpisodeDisplay();
 })

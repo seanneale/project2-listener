@@ -20,58 +20,34 @@ function dateConvert(date){
 	return convertDate(targetDate.getDate())+' '+convertMonth(targetDate.getMonth());
 }
 
-function login(e){
-	e.preventDefault();
-	var input = $('#login input');
-	var username = $(input[0]).val();
-	var password = $(input[1]).val();
-
+function ajaxPost(input,url){
 	var user = {
-		username: username,
-		password: password
+		username: $(input[0]).val(),
+		password: $(input[1]).val()
 	};
 
 	$.ajax({
 		method: 'POST',
-		url: '/login',
+		url: url,
 		data: user
 	}).done(function(){
 		window.location.href = '/episodes';
 	})
+	return false;
+}
+
+function login(e){
+	e.preventDefault();
+	var input = $('#login input');
+	var url = '/login'
+	ajaxPost(input,url);
 }
 
 function signUp(e){
 	e.preventDefault();
 	var input = $('#signUp input');
-	var username = $(input[0]).val();
-	var password = $(input[1]).val();
-
-	var newUser = {
-		username: username,
-		password: password
-	};
-
-	$.ajax({
-		method: 'POST',
-		url: '/signup',
-		data: newUser
-	}).done(function(){
-		window.location.href = '/episodes'
-	})
-}
-
-function addNewPodcast(e){
-	e.preventDefault();
-	var newPodcastUrl = $('#newPodcastEntry').val();
-	console.log(typeof(newPodcastUrl));
-
-	$.ajax({
-		method: 'POST',
-		url: '/',
-		data: {newPodcastUrl: newPodcastUrl}
-	}).done(function(){
-		window.location.href = '/episodes'
-	})
+	var url = '/signup';
+	ajaxPost(input,url);
 }
 
 function swap(e){
@@ -85,7 +61,6 @@ $(document).ready(function(){
 	console.log('ready');
 	$('#loginSubmitBtn').on('click',login);
 	$('#signUpSubmitBtn').on('click',signUp);
-	$('#newPodcast').on('click',addNewPodcast);
 	$('.switch').on('click',swap);
 	$('.waves-effect').removeClass('waves-effect');
 	$('.waves-light').removeClass('waves-light');
