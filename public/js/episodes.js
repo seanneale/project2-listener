@@ -33,13 +33,13 @@ function loadEpisodeDisplay(){
 		if(unsrtArray.length < limit) {
 			limit = unsrtArray.length;
 		}
-		for(var i = 0; i < limit; i ++){
+		for(var k = 0; k < limit; k ++){
 			var podcastElement = podcastTemplate;
-			podcastElement = podcastElement.replace('IMAGEREPLACE',unsrtArray[i].episode.image);
-			podcastElement = podcastElement.replace('EPISODELOCREPLACE',unsrtArray[i].episode.episodeLoc);
-			podcastElement = podcastElement.replace('EPISODEID',unsrtArray[i].episode._id);
-			podcastElement = podcastElement.replace('EPISODENAMEREPLACE',unsrtArray[i].episode.episodeName);
-			podcastElement = podcastElement.replace('EPISODERELEASEDATE',dateConvert(unsrtArray[i].episode.releaseDate));
+			podcastElement = podcastElement.replace('IMAGEREPLACE',unsrtArray[k].episode.image);
+			podcastElement = podcastElement.replace('EPISODELOCREPLACE',unsrtArray[k].episode.episodeLoc);
+			podcastElement = podcastElement.replace('EPISODEID',unsrtArray[k].episode._id);
+			podcastElement = podcastElement.replace('EPISODENAMEREPLACE',unsrtArray[k].episode.episodeName);
+			podcastElement = podcastElement.replace('EPISODERELEASEDATE',dateConvert(unsrtArray[k].episode.releaseDate));
 			$('#episodeDisplay').append(podcastElement);
 		}
 		$('audio').on('ended', function(event){
