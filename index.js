@@ -12,7 +12,7 @@ var app = express();
 
 // Connect with Mongo DB
 var mongoUri =  process.env.MONGOLAB_URI || 'mongodb://localhost/animalshelter';
-moongoose.connect(mongoUri);
+mongoose.connect(mongoUri);
 
 //linking collections
 var userReq = require('./models/user');
