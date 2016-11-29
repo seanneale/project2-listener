@@ -14,7 +14,6 @@ function arraySort(inputArray){
 }
 
 function sendMarkAllEpisodesAsPlayed(name){
-	console.log('sending');
 	$.ajax({
 		method: 'PUT',
 		url: '/playedepisodes',
@@ -23,7 +22,6 @@ function sendMarkAllEpisodesAsPlayed(name){
 }
 
 function sendDeleteSubs(name){
-	console.log('sending');
 	$.ajax({
 		method: 'DELETE',
 		url: '/removesubs',
