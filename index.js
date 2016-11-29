@@ -11,7 +11,8 @@ var session = require('express-session');
 var app = express();
 
 // Connect with Mongo DB
-mongoose.connect('mongodb://localhost/the-listener');
+var mongoUri =  process.env.MONGOLAB_URI || 'mongodb://localhost/animalshelter';
+moongoose.connect(mongoUri);
 
 //linking collections
 var userReq = require('./models/user');
@@ -48,7 +49,9 @@ require('./routes/routes')(app, passport);
 var server = require('http').Server(app);
 
 // listen
-server.listen( 3000, function(){
+
+var port = process.env.PORT || 3000;
+server.listen( port, function(){
     console.log('listening on port 3000');
 });
 
